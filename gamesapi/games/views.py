@@ -131,3 +131,6 @@ class ApiRoot(generics.GenericAPIView):
             'scores': reverse(PlayerScoreList.name, request=request)
         })
 
+
+
+
