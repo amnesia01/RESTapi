@@ -5,10 +5,11 @@ from django.views.decorators.csrf import csrf_exempt
 # from rest_framework.renderers import JSONRenderer  # 被Response替代
 # from rest_framework.parsers import JSONParser  # 使用装饰器后更改
 from rest_framework.response import Response  # renders the received data into the appropriate content type
-from rest_framework import status
+from rest_framework import status, generics
+from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
-from .models import Game
-from .serializers import GameSerializer
+from .models import Game, GameCategory, PlayerScore, Player
+from .serializers import GameSerializer, GameCategorySerializer, PlayerScoreSerializer, PlayerSerializer
 
 '''
 第二章中 被Response 替代
@@ -21,7 +22,7 @@ class JSONResponse(HttpResponse):
         content = JSONRenderer().render(data)
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
-'''
+
 
 
 @api_view(['GET', 'POST'])  # 第二章添加
@@ -68,8 +69,64 @@ def game_detail(request, pk):
         game.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+'''
 
 
+class GameCategoryList(generics.ListCreateAPIView):
+    queryset = GameCategory.objects.all()
+    serializer_class = GameCategorySerializer
+    name = 'gamecategory-list'
 
 
+class GameCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = GameCategory.objects.all()
+    serializer_class = GameCategorySerializer
+    name = 'gamecategory-detail'
+
+
+class GameList(generics.ListCreateAPIView):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    name = 'game-list'
+
+
+class GameDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    name = 'game-detail'
+
+
+class PlayerList(generics.ListCreateAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSerializer
+    name = 'player-list'
+
+
+class PlayerDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSerializer
+    name = 'player-detail'
+
+
+class PlayerScoreList(generics.ListCreateAPIView):
+    queryset = PlayerScore.objects.all()
+    serializer_class = PlayerScoreSerializer
+    name = 'playerscore-list'
+
+
+class PlayerScoreDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = PlayerScore.objects.all()
+    serializer_class = PlayerScoreSerializer
+    name = 'playerscore-detail'
+
+
+class ApiRoot(generics.GenericAPIView):
+    name = 'api-root'
+    def get(self, request, *args, **kwargs):
+        return Response({
+            'players': reverse(PlayerList.name, request=request,),
+            'game-categories': reverse(GameCategoryList.name, request=request),
+            'games':reverse(GameList.name, request=request)
+            'scores' : reverse(PlayerScoreList.name, request=request)
+        })
 
