@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Game, GameCategory, Player, PlayerScore
-import gamesapi.games.views
 
 
 class GameSerializer(serializers.HyperlinkedModelSerializer):
@@ -87,8 +86,8 @@ class PlayerScoreSerializer(serializers.ModelSerializer):
                                         slug_field='name')
 
     class Meta:
-        model = Player
-        Scorefields = (
+        model = PlayerScore
+        fields = (
             'url',
             'pk',
             'score',

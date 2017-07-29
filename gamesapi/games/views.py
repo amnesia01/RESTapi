@@ -1,13 +1,11 @@
 # from django.shortcuts import render
 # API views
 # from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 # from rest_framework.renderers import JSONRenderer  # 被Response替代
 # from rest_framework.parsers import JSONParser  # 使用装饰器后更改
 from rest_framework.response import Response  # renders the received data into the appropriate content type
-from rest_framework import status, generics
+from rest_framework import  generics
 from rest_framework.reverse import reverse
-from rest_framework.decorators import api_view
 from .models import Game, GameCategory, PlayerScore, Player
 from .serializers import GameSerializer, GameCategorySerializer, PlayerScoreSerializer, PlayerSerializer
 
